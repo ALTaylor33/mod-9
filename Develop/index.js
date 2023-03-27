@@ -1,6 +1,7 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer');
 const fs = require("fs")
+//const generateMarkdown = require('./generateMarkdown.js')
 // TODO: Create an array of questions for user input
 inquirer.questions([
     {
@@ -57,7 +58,7 @@ inquirer.questions([
                 type: 'input',
                 message: 'Any tutorials fallowed? (if no typr none)',
                 name: 'tutorials',
-              },
+              }
 ])
 .then((response)=>{
 readMe = `#${response.title}
@@ -80,7 +81,7 @@ readMe = `#${response.title}
 -Tutorials used ${response.tutorials}
 
 ## License
-
+${license.data}
 `
 // TODO: Create a function to write README file
 fs.writeToFile('README.md', readMe, (err) => {
