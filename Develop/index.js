@@ -1,99 +1,108 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer');
-const fs = require("fs")
-//const generateMarkdown = require('./generateMarkdown.js')
+const fs = require("fs");
+const markdown = require("../generateMarkdown.js")
 // TODO: Create an array of questions for user input
-inquirer.questions([
-    {
-        type: 'input',
-        message: 'Title of App?',
-        name: 'Title',
-      },
-      {
-          type: 'input',
-          message: 'Brief discription?',
-          name: 'discription',
-        },
-      {
-        type: 'input',
-        message: 'Motivation for the project?',
-        name: 'motivation',
-      },
-      {
-        type: 'input',
-        message: 'why did you build this project?',
-        name: 'reason',
-      },
-      {
-          type: 'input',
-          message: 'what problems does it sovle?',
-          name: 'solve',
-        },
-        {
-            type: 'input',
-            message: 'what did you learn',
-            name: 'learn',
-          },
-          {
-              type: 'input',
-              message: 'What makes your project stand out?',
-              name: 'standout',
-            },
-            {
-                type: 'input',
-                message: 'how do you install/run the app?',
-                name: 'install',
-              },
-              {
-                type: 'input',
-                message: 'Any collaborators? (if no type none)',
-                name: 'collaborators',
-              },
-              {
-                type: 'input',
-                message: 'Any third-party assest used? (If no type none)',
-                name: 'assets',
-              },
-              {
-                type: 'input',
-                message: 'Any tutorials fallowed? (if no typr none)',
-                name: 'tutorials',
-              }
-])
-.then((response)=>{
-readMe = `#${response.title}
+const questions = [
+  {
+    type: 'input',
+    message: 'Title of App?',
+    name: 'title',
+  },
+  {
+    type: 'input',
+    message: 'Brief discription?',
+    name: 'description',
+  },
+  {
+    type: 'input',
+    message: 'Motivation for the project?',
+    name: 'motivation',
+  },
+  {
+    type: 'input',
+    message: 'Why did you build this project?',
+    name: 'reason',
+  },
+  {
+    type: 'input',
+    message: 'What problems does it solve?',
+    name: 'solve',
+  },
+  {
+    type: 'input',
+    message: 'What did you learn?',
+    name: 'learn',
+  },
+  {
+    type: 'input',
+    message: 'What makes your project stand out?',
+    name: 'standout',
+  },
+  {
+    type: 'input',
+    message: 'How do you install/run the app?',
+    name: 'install',
+  },
+  {
+    type: 'input',
+    message: 'Any collaborators? (if no type none)',
+    name: 'collaborators',
+  },
+  {
+    type: 'input',
+    message: 'Any third-party assets used? (If no type none)',
+    name: 'assets',
+  },
+  {
+    type: 'input',
+    message: 'Any tutorials followed? (if no type none)',
+    name: 'tutorials',
+  },
+  {
+    type: 'input',
+    message: 'What license did you use? (if none type none)',
+    name: 'license',
+  }
+];
 
-##${response.discription}
--motivation for this app - ${response.motivation}
--Why did I build this app - ${response.reason}
--What does it solve - ${response.solve}
--What I learned - ${response.learn}
-
-## Installation
--${response.install}
-
-## Credits
-
--collaborators ${response.collaborators} 
-
--Third-party assets used ${response.assets}
-
--Tutorials used ${response.tutorials}
-
-## License
-${license.data}
-`
 // TODO: Create a function to write README file
-fs.writeToFile('README.md', readMe, (err) => {
+function writeToFile(fileName, data) {
+  fs.writeFile(fileName, data, (err) => {
     if (err) throw err;
     console.log('README file created successfully!');
-  })
-}).catch((err)=>{
-console.log(err)
-});
+  });
+}
 
 // TODO: Create a function to initialize app
-function init() {}
+function init() {
+  inquirer.prompt(questions).then((responses) => {
+    const readMe = `
+# ${responses.title}
+
+## ${responses.description}
+- Motivation for this app: ${responses.motivation}
+- Why did I build this app: ${responses.reason}
+- What does it solve: ${responses.solve}
+- What I learned: ${responses.learn}
+- What makes it stand out: ${responses.standout}
+
+## Installation
+${responses.install}
+
+## Credits
+- Collaborators: ${responses.collaborators} 
+- Third-party assets used: ${responses.assets}
+- Tutorials used: ${responses.tutorials}
+
+## License
+This project is licensed under the ${responses.license} License.
+${markdown.renderLicenseBadge(data.license)}
+`;
+
+    writeToFile('README.md', readMe);
+  });
+}
 
 // Function call to initialize app
 init();
