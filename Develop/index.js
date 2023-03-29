@@ -1,7 +1,7 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer');
 const fs = require("fs");
-const markdown = require("../generateMarkdown.js")
+const generateMarkdown = require("./utils/generateMarkdown")
 // TODO: Create an array of questions for user input
 const questions = [
   {
@@ -60,9 +60,15 @@ const questions = [
     name: 'tutorials',
   },
   {
-    type: 'input',
-    message: 'What license did you use? (if none type none)',
+    type: 'list',
+    message: 'What license do you want to use?',
     name: 'license',
+    choices: [
+      'MIT License',
+      'Apache License 2.0',
+      'GPLv3',
+      'None'
+    ]
   }
 ];
 
@@ -97,7 +103,7 @@ ${responses.install}
 
 ## License
 This project is licensed under the ${responses.license} License.
-${markdown.renderLicenseBadge(data.license)}
+${generateMarkdown(responses.license)}
 `;
 
     writeToFile('README.md', readMe);
